@@ -79,10 +79,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const nextTheme: Theme = resolvedTheme === "dark" ? "light" : "dark";
 
     // Fallback if View Transitions API is not supported
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const doc = document as any;
-
-    if (!doc.startViewTransition) {
+    if (typeof document.startViewTransition !== "function") {
       setTheme(nextTheme);
       return;
     }
@@ -97,7 +94,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       Math.max(y, window.innerHeight - y)
     );
 
-    const transition = doc.startViewTransition(() => {
+    const transition = document.startViewTransition(() => {
       // Use flushSync to ensure React updates the DOM immediately
       flushSync(() => {
         setTheme(nextTheme);
